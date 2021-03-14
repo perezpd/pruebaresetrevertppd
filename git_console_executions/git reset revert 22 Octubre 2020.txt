@@ -1,0 +1,365 @@
+cd c:
+mkdir probandoresetrevert
+cd probandoresetrevert
+git init
+
+Creo fichero1
+start notepad fichero1
+
+git status
+git add .
+clear
+$ git commit -m "Primer Fichero 1"
+[master (root-commit) 974eb4b] Primer Fichero 1
+ 1 file changed, 1 insertion(+)
+ create mode 100644 fichero1.txt
+
+$ git log --oneline
+974eb4b (HEAD -> master) Primer Fichero 1
+
+$ git reflog
+974eb4b (HEAD -> master) HEAD@{0}: commit (initial): Primer Fichero 1
+
+Añado fichero 2 en working directory
+
+$ git status
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        fichero2.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+git add .
+$ git commit -m "Segundo Fichero 2"
+[master 9124bbd] Segundo Fichero 2
+ 1 file changed, 1 insertion(+)
+ create mode 100644 fichero2.txt
+
+$ git log --oneline
+9124bbd (HEAD -> master) Segundo Fichero 2
+974eb4b Primer Fichero 1
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git reflog
+9124bbd (HEAD -> master) HEAD@{0}: commit: Segundo Fichero 2
+974eb4b HEAD@{1}: commit (initial): Primer Fichero 1
+
+Creamos 3 fichero
+
+$ git status
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        fichero3.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+$ git add .
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git commit -m "Tercer Fichero 3"
+[master 0959b1b] Tercer Fichero 3
+ 1 file changed, 1 insertion(+)
+ create mode 100644 fichero3.txt
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git log --oneline
+0959b1b (HEAD -> master) Tercer Fichero 3
+9124bbd Segundo Fichero 2
+974eb4b Primer Fichero 1
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git reflog
+0959b1b (HEAD -> master) HEAD@{0}: commit: Tercer Fichero 3
+9124bbd HEAD@{1}: commit: Segundo Fichero 2
+974eb4b HEAD@{2}: commit (initial): Primer Fichero 1
+
+$ git revert 9124bbd
+Removing fichero2.txt
+[master 6a10a7d] Revert "Segundo Fichero 2"
+ 1 file changed, 1 deletion(-)
+ delete mode 100644 fichero2.txt
+
+$ git log --oneline
+6a10a7d (HEAD -> master) Revert "Segundo Fichero 2"
+0959b1b Tercer Fichero 3
+9124bbd Segundo Fichero 2
+974eb4b Primer Fichero 1
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git log --oneline
+6a10a7d (HEAD -> master) Revert "Segundo Fichero 2"
+0959b1b Tercer Fichero 3
+9124bbd Segundo Fichero 2
+974eb4b Primer Fichero 1
+
+$ git revert 6a10a7d
+[master ba7b92c] Revert "Revert "Segundo Fichero 2""
+ 1 file changed, 1 insertion(+)
+ create mode 100644 fichero2.txt
+
+$ ls
+fichero1.txt  fichero2.txt  fichero3.txt
+
+$ git log --oneline
+ba7b92c (HEAD -> master) Revert "Revert "Segundo Fichero 2""
+6a10a7d Revert "Segundo Fichero 2"
+0959b1b Tercer Fichero 3
+9124bbd Segundo Fichero 2
+974eb4b Primer Fichero 1
+
+$ git reflog
+ba7b92c (HEAD -> master) HEAD@{0}: revert: Revert "Revert "Segundo Fichero 2""
+6a10a7d HEAD@{1}: revert: Revert "Segundo Fichero 2"
+0959b1b HEAD@{2}: commit: Tercer Fichero 3
+9124bbd HEAD@{3}: commit: Segundo Fichero 2
+974eb4b HEAD@{4}: commit (initial): Primer Fichero 1
+
+$ git revert 974eb4b
+Removing fichero1.txt
+[master 58e069d] Revert "Primer Fichero 1"
+ 1 file changed, 1 deletion(-)
+ delete mode 100644 fichero1.txt
+
+$ ls
+fichero2.txt  fichero3.txt
+$ git reflog
+58e069d (HEAD -> master) HEAD@{0}: revert: Revert "Primer Fichero 1"
+ba7b92c HEAD@{1}: revert: Revert "Revert "Segundo Fichero 2""
+6a10a7d HEAD@{2}: revert: Revert "Segundo Fichero 2"
+0959b1b HEAD@{3}: commit: Tercer Fichero 3
+9124bbd HEAD@{4}: commit: Segundo Fichero 2
+974eb4b HEAD@{5}: commit (initial): Primer Fichero 1
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git revert 58e069d
+[master e05fec2] Revert "Revert "Primer Fichero 1""
+ 1 file changed, 1 insertion(+)
+ create mode 100644 fichero1.txt
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ ls
+fichero1.txt  fichero2.txt  fichero3.txt
+
+$ git revert HEAD
+Removing fichero1.txt
+[master 8dc5e9d] Revert "Revert "Revert "Primer Fichero 1"""
+ 1 file changed, 1 deletion(-)
+ delete mode 100644 fichero1.txt
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ LS
+fichero2.txt  fichero3.txt
+
+$ git reflog
+8dc5e9d (HEAD -> master) HEAD@{0}: revert: Revert "Revert "Revert "Primer Fichero 1"""
+e05fec2 HEAD@{1}: revert: Revert "Revert "Primer Fichero 1""
+58e069d HEAD@{2}: revert: Revert "Primer Fichero 1"
+ba7b92c HEAD@{3}: revert: Revert "Revert "Segundo Fichero 2""
+6a10a7d HEAD@{4}: revert: Revert "Segundo Fichero 2"
+0959b1b HEAD@{5}: commit: Tercer Fichero 3
+9124bbd HEAD@{6}: commit: Segundo Fichero 2
+974eb4b HEAD@{7}: commit (initial): Primer Fichero 1
+
+$ git revert 8dc5e9d
+[master e1d569c] Revert "Revert "Revert "Revert "Primer Fichero 1""""
+ 1 file changed, 1 insertion(+)
+ create mode 100644 fichero1.txt
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ ls
+fichero1.txt  fichero2.txt  fichero3.txt
+
+$ git log --oneline
+e1d569c (HEAD -> master) Revert "Revert "Revert "Revert "Primer Fichero 1""""
+8dc5e9d Revert "Revert "Revert "Primer Fichero 1"""
+e05fec2 Revert "Revert "Primer Fichero 1""
+58e069d Revert "Primer Fichero 1"
+ba7b92c Revert "Revert "Segundo Fichero 2""
+6a10a7d Revert "Segundo Fichero 2"
+0959b1b Tercer Fichero 3
+9124bbd Segundo Fichero 2
+974eb4b Primer Fichero 1
+
+$ git reset 974eb4b
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git log --oneline
+974eb4b (HEAD -> master) Primer Fichero 1
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ ls
+fichero1.txt  fichero2.txt  fichero3.txt
+
+$ git reflog
+974eb4b (HEAD -> master) HEAD@{0}: reset: moving to 974eb4b
+e1d569c HEAD@{1}: revert: Revert "Revert "Revert "Revert "Primer Fichero 1""""
+8dc5e9d HEAD@{2}: revert: Revert "Revert "Revert "Primer Fichero 1"""
+e05fec2 HEAD@{3}: revert: Revert "Revert "Primer Fichero 1""
+58e069d HEAD@{4}: revert: Revert "Primer Fichero 1"
+ba7b92c HEAD@{5}: revert: Revert "Revert "Segundo Fichero 2""
+6a10a7d HEAD@{6}: revert: Revert "Segundo Fichero 2"
+0959b1b HEAD@{7}: commit: Tercer Fichero 3
+9124bbd HEAD@{8}: commit: Segundo Fichero 2
+974eb4b (HEAD -> master) HEAD@{9}: commit (initial): Primer Fichero 1
+
+$ git log --oneline
+974eb4b (HEAD -> master) Primer Fichero 1
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ ls
+fichero1.txt  fichero2.txt  fichero3.txt
+
+$ git reset --hard 974eb4b
+HEAD is now at 974eb4b Primer Fichero 1
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ ls
+fichero1.txt  fichero2.txt
+
+$ git log --oneline
+974eb4b (HEAD -> master) Primer Fichero 1
+
+$ git reflog
+974eb4b (HEAD -> master) HEAD@{0}: reset: moving to 974eb4b
+6a10a7d HEAD@{1}: reset: moving to 6a10a7d
+974eb4b (HEAD -> master) HEAD@{2}: reset: moving to 974eb4b
+974eb4b (HEAD -> master) HEAD@{3}: reset: moving to 974eb4b
+e1d569c HEAD@{4}: revert: Revert "Revert "Revert "Revert "Primer Fichero 1""""
+8dc5e9d HEAD@{5}: revert: Revert "Revert "Revert "Primer Fichero 1"""
+e05fec2 HEAD@{6}: revert: Revert "Revert "Primer Fichero 1""
+58e069d HEAD@{7}: revert: Revert "Primer Fichero 1"
+ba7b92c HEAD@{8}: revert: Revert "Revert "Segundo Fichero 2""
+6a10a7d HEAD@{9}: revert: Revert "Segundo Fichero 2"
+0959b1b HEAD@{10}: commit: Tercer Fichero 3
+9124bbd HEAD@{11}: commit: Segundo Fichero 2
+974eb4b (HEAD -> master) HEAD@{12}: commit (initial): Primer Fichero 1
+$ git reset --hard 974eb4b
+HEAD is now at 974eb4b Primer Fichero 1
+
+$ ls
+fichero1.txt  fichero2.txt
+
+$ git status
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        fichero2.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+$ git add .
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git commit -m "Otro commit del Fichero 2"
+[master 07dfd4c] Otro commit del Fichero 2
+ 1 file changed, 1 insertion(+)
+ create mode 100644 fichero2.txt
+
+$ git log --oneline
+07dfd4c (HEAD -> master) Otro commit del Fichero 2
+974eb4b Primer Fichero 1
+
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ ls
+fichero1.txt  fichero2.txt
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git reset --hard 974eb4b
+HEAD is now at 974eb4b Primer Fichero 1
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ ls
+fichero1.txt
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git log --oneline
+974eb4b (HEAD -> master) Primer Fichero 1
+
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+$ git reflog
+974eb4b (HEAD -> master) HEAD@{0}: reset: moving to 974eb4b
+07dfd4c HEAD@{1}: commit: Otro commit del Fichero 2
+974eb4b (HEAD -> master) HEAD@{2}: reset: moving to 974eb4b
+974eb4b (HEAD -> master) HEAD@{3}: reset: moving to 974eb4b
+6a10a7d HEAD@{4}: reset: moving to 6a10a7d
+974eb4b (HEAD -> master) HEAD@{5}: reset: moving to 974eb4b
+974eb4b (HEAD -> master) HEAD@{6}: reset: moving to 974eb4b
+e1d569c HEAD@{7}: revert: Revert "Revert "Revert "Revert "Primer Fichero 1""""
+8dc5e9d HEAD@{8}: revert: Revert "Revert "Revert "Primer Fichero 1"""
+e05fec2 HEAD@{9}: revert: Revert "Revert "Primer Fichero 1""
+58e069d HEAD@{10}: revert: Revert "Primer Fichero 1"
+ba7b92c HEAD@{11}: revert: Revert "Revert "Segundo Fichero 2""
+6a10a7d HEAD@{12}: revert: Revert "Segundo Fichero 2"
+0959b1b HEAD@{13}: commit: Tercer Fichero 3
+9124bbd HEAD@{14}: commit: Segundo Fichero 2
+974eb4b (HEAD -> master) HEAD@{15}: commit (initial): Primer Fichero 1
+
+$ git add .
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git commit -m "Otra vez Fichero 1"
+[master bc0de90] Otra vez Fichero 1
+ 1 file changed, 1 insertion(+)
+ create mode 100644 fichero1.txt
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git log --oneline
+bc0de90 (HEAD -> master) Otra vez Fichero 1
+e2b2e32 Revert "Primer Fichero 1"
+974eb4b Primer Fichero 1
+
+$ git log --oneline
+bc0de90 (HEAD -> master) Otra vez Fichero 1
+e2b2e32 Revert "Primer Fichero 1"
+974eb4b Primer Fichero 1
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ ^C
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git reset --soft e2b2e32
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ ls
+fichero1.txt
+
+manuel@DESKTOP-VPL66KC MINGW64 /c/probandoresetrevert (master)
+$ git log --oneline
+e2b2e32 (HEAD -> master) Revert "Primer Fichero 1"
+974eb4b Primer Fichero 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
